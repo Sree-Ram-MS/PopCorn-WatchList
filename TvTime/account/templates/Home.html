@@ -1,0 +1,79 @@
+{% extends 'SideBar.html' %}
+{% block side %}
+
+{% if messages %}
+    {% for i in messages %}
+        {% if i.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="fas fa-check-circle"></i></span>
+            <strong>Success:</strong> {{ i }}
+        </div>
+        {% endif %}
+        {% if i.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="fas fa-exclamation-circle"></i></span>
+            <strong>Error:</strong> {{ i }}
+        </div>
+        {% endif %}
+        {% if i.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="fas fa-info-circle"></i></span>
+            <strong>Info:</strong> {{ i }}
+        </div>
+        {% endif %}
+        {% if i.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
+            <strong>Warning:</strong> {{ i }}
+        </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<script>
+function closeAlert(button) {
+    button.closest('.alert').remove();
+}
+</script>
+
+
+
+
+
+<h1 class="h1 text-light pl-4 pt-3" id="pageHeaderTitle">Populer Movies</h1>
+
+<div class="container">
+
+  <div class="row">
+
+    {% for i in movie %}
+    <div class="col-md-4">
+
+    <div class="card bg-info text-white" style="margin-top: 1.7rem;">
+      <img class="card-img" src="{{ i.poster }}" alt="Card image" style="width:100%">
+      <div class="card-img-overlay">
+        <h4 class="card-title" style="font-size:large;">{{ i.title }}</h4>
+        <div class="card-footer" style="padding-bottom: 10px ;">{{ i.rate }} </div>
+      </div>
+    </div>
+    
+  </div>
+  {% endfor %}
+
+
+  
+</div>
+
+{% endblock side %}

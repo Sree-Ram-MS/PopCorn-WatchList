@@ -1,0 +1,154 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>PopCorn WatchList Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-fI/1JxHuH7rePH8X+UGgjjZpR/T2Znwl9Bny9Sdng/02wjlLiXq+3s60Y9tl96+sZZrxJfUSYJoJ49Jl8nzwvw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+	<script src="{% static 'js/easy_background.js' %}"></script>
+
+
+	<link rel = "icon" href ="static/images/logo.png"  type = "image/x-icon">
+
+	</head>
+	<body>
+
+		{% if messages %}
+		{% for i in messages %}
+			{% if i.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute;">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<span class="alert-icon"><i class="fas fa-check-circle"></i></span>
+				<strong>Success:</strong> {{ i }}
+			</div>
+			{% endif %}
+			{% if i.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute;" 	>
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<span class="alert-icon"><i class="fas fa-exclamation-circle"></i></span>
+				<strong>Error:</strong> {{ i }}
+			</div>
+			{% endif %}
+			{% if i.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+			<div class="alert alert-info alert-dismissible fade show" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<span class="alert-icon"><i class="fas fa-info-circle"></i></span>
+				<strong>Info:</strong> {{ i }}
+			</div>
+			{% endif %}
+			{% if i.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+			<div class="alert alert-warning alert-dismissible fade show" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
+				<strong>Warning:</strong> {{ i }}
+			</div>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+	
+	<script>
+	function closeAlert(button) {
+		button.closest('.alert').remove();
+	}
+	</script>
+
+
+  <script>
+    easy_background("body",
+
+      {
+        slide: ["static/images/lala.jpeg",
+		"static/images/Baba.jpg",
+		"static/images/iver.jpg",
+		"static/images/Loki.jpg",
+		"static/images/Mr_Robot.jpg",
+		"static/images/Peaky.jpg",
+		"static/images/Ragner.jpg",
+		"static/images/SE.jpg",
+		"static/images/Shelby.jpg",
+		"static/images/Spider Man.jpg",
+		"static/images/your name.jpg",
+		"static/images/bg.jpg",
+		  
+		],
+
+        delay: [6000]
+      }
+
+
+    );
+  </script>
+
+
+	<section class="ftco-section" style="padding-top: 75px;padding-bottom: 65px;">
+	<div class="container">
+			<div class="row justify-content-center">	
+				<div class="col-md-6 text-center mb-5">
+					<h1 class="heading-section">🎬PopCorn WatchList🍿</h1>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-6 col-lg-4">
+					<div class="login-wrap p-0">
+		      	<h3 class="mb-4 text-center">Have an account?</h3>
+		      	<form action="#"  method="post" class="signin-form">
+					{% csrf_token %}
+		      		<div class="form-group">
+		      			<input type="text" name="{{ form.username.html_name }}" class="form-control" placeholder="Username" required>
+		      		</div>
+	            <div class="form-group">
+	              <input id="password-field" type="password" name="{{ form.password.html_name }}" class="form-control" placeholder="Password" required>
+	              <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+	            </div>
+	            <div class="form-group">
+	            	<button type="submit" class="form-control btn btn-primary submit px-3">LogIn</button>
+	            </div>
+	            <div class="form-group d-md-flex">
+	            	<div class="w-50 text-md-left">
+						Don’t have an account?<a href="{% url 'signin' %}" style="color: #fff">Sign In</a>
+					</div>
+					<div class="w-50 text-md-right">
+						<a href="#" style="color: #fff">Forgot Password</a>
+					</div>
+	            </div>
+	          </form>
+	          <p class="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
+	          <div class="social d-flex text-center">
+	          	<a href="#" class="px-2 py-2 mr-md-1 rounded"><span class="ion-logo-facebook mr-2"></span> Facebook</a>
+	          	<a href="#" class="px-2 py-2 ml-md-1 rounded"><span class="ion-logo-twitter mr-2"></span> Twitter</a>
+	          </div>
+		      </div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/popper.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+
+
+
+
+	</body>
+</html>
+

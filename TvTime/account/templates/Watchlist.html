@@ -1,0 +1,121 @@
+{% extends 'SideBar.html' %}
+{% load static %}
+{% block side %}
+
+{% if messages %}
+    {% for i in messages %}
+        {% if i.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="fas fa-check-circle"></i></span>
+            <strong>Success:</strong> {{ i }}
+        </div>
+        {% endif %}
+        {% if i.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="fas fa-exclamation-circle"></i></span>
+            <strong>Error:</strong> {{ i }}
+        </div>
+        {% endif %}
+        {% if i.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="fas fa-info-circle"></i></span>
+            <strong>Info:</strong> {{ i }}
+        </div>
+        {% endif %}
+        {% if i.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
+            <strong>Warning:</strong> {{ i }}
+        </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<script>
+function closeAlert(button) {
+    button.closest('.alert').remove();
+}
+</script>
+
+
+<link href="{% static 'css/style1.css' %}" rel="stylesheet" /> 
+
+<h1  style="background-color: #110f16;">&nbsp;&nbsp;&nbsp;&nbsp;WatchList</h1>
+{% for film,fid in combined_list %}
+
+<!-- card -->
+<section class="dark" style="height:100%">
+
+    <div class="container py-4">
+
+        {% if film %}
+        <article class="postcard dark blue">
+            {% if film.poster_url %}
+            <a class="postcard__img_link" href="#">
+                <img class="postcard__img" src="{{ film.poster_url }}" alt="Image Title" />
+            </a>
+            {% endif %}
+            <div class="postcard__text">
+                <h1 class="postcard__title blue"><a href="#">{{ film.title }}</a></h1>
+                <div class="postcard__subtitle small">
+                    <time datetime="2020-05-25 12:00:00">
+                        <i class="fa-solid fa-clapperboard mr-2"></i>{{ film.kind|capfirst }}&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <i class="fas fa-calendar-alt mr-2"></i>{% if film.airdate %}
+                        {{ film.airdate }}&nbsp;&nbsp;|&nbsp;&nbsp;
+                        {% else %}
+                        {{ film.year }}&nbsp;&nbsp;|&nbsp;&nbsp;
+                        {% endif %}
+                        <i class="fas fa-masks-theater"></i>
+                        {% for genre in film.genres %}
+                        {{ genre  }}
+                        {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </time>
+                </div>
+                <div class="postcard__bar"></div>
+                <div class="postcard__preview-txt">
+                    <strong>Cast :</strong>
+                    {% for cast in film.cast|slice:":5" %}
+                    {{ cast }}
+                    {% if not forloop.last %}, {% endif %}
+                    {% endfor %}</div>
+                    <br>
+                <div class="postcard__preview-txt">
+                    <strong>Plot :</strong>
+                    {% for i in film.plot|slice:":2" %}
+                    {{ i }}
+                    {% endfor %}</div>
+                <ul class="postcard__tagbox">
+                    <li class="tag__item"><i class="fas fa-language mr-2"></i>{{ film.languages.0 }}</li><!--iterate if you want all availabel language-->
+                    <li class="tag__item"><i class="fas fa-clock mr-2"></i>{{ film.runtimes.0 }}&nbsp;mins </li>
+                    <li class="tag__item"><i class="fa-solid fa-star mr-2" style="color: gold;"></i>{{ film.rating }} </li>
+                    <li class="tag__item play blue float-right">
+                        <a href="{% url 'DelWatch' fid.id %}"><i class="fas fa-trash mr-2" style="color: rgb(255, 154, 2);"></i>Remove From Watchlist</a>
+                    </li>
+                </ul>
+            </div>
+        </article> 
+    </div>
+</section>
+
+<!-- ##### -->
+
+    {% else %}
+    <h1 class="h1 text-center bg-warning" id="pageHeaderTitle">No Movies In Fav</h1>
+
+    {% endif %}
+{% endfor %}
+
+{% endblock side %}

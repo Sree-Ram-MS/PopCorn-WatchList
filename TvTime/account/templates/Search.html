@@ -1,0 +1,151 @@
+{% extends 'SideBar.html' %}
+{% load static %}
+{% block side %}
+
+{% if messages %}
+    {% for i in messages %}
+        {% if i.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="fas fa-check-circle"></i></span>
+            <strong>Success:</strong> {{ i }}
+        </div>
+        {% endif %}
+        {% if i.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="fas fa-exclamation-circle"></i></span>
+            <strong>Error:</strong> {{ i }}
+        </div>
+        {% endif %}
+        {% if i.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="fas fa-info-circle"></i></span>
+            <strong>Info:</strong> {{ i }}
+        </div>
+        {% endif %}
+        {% if i.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="closeAlert(this)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span class="alert-icon"><i class="fas fa-exclamation-triangle"></i></span>
+            <strong>Warning:</strong> {{ i }}
+        </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<script>
+function closeAlert(button) {
+    button.closest('.alert').remove();
+}
+</script>
+
+
+
+
+<link href="{% static 'css/style1.css' %}" rel="stylesheet" /> 
+
+
+
+<!-- card -->
+<section class="dark" style="height:100%">
+    <div class="container py-4">
+
+        <form method="post" action="{% url 'Search' %}">
+            {% csrf_token %}
+
+            <div class="input-group" >
+                <div class="form-outline" style="width: 95%;">
+                <input type="search" id="form1" placeholder="Search Movie"  name="query" class="form-control"  />
+                </div>
+                <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search "></i>
+                </button>
+            </div>
+
+        </form>
+
+        {% if film %}
+        <h1 class="h1 text-center" id="pageHeaderTitle">Search Results for "{{ query }}"</h1>
+        
+        <article class="postcard dark blue">
+            {% if film.poster_url %}
+            <a class="postcard__img_link" href="#">
+                <img class="postcard__img" src="{{ film.poster_url }}" alt="Image Title" />
+            </a>
+            {% endif %}
+            <div class="postcard__text">
+                <h1 class="postcard__title blue"><a href="#">{{ film.title }}</a>
+                    
+                    <i id="addto" class="nav-link dropdown-toggle fas fa-list float-right xs" style="color:white; transform: scale(0.8);" data-bs-toggle="dropdown" aria-expanded="false"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="addto" style="color: rgb(255, 255, 255);background-color: rgb(0, 0, 0);">
+                        <li><a class="dropdown-item" href="{% url 'Watchlist' film.movie_id %}">Add to WatchList</a></li>
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                    </ul>
+                    
+
+                </h1>
+                        <div class="postcard__subtitle small">
+                    <time datetime="2020-05-25 12:00:00">
+                        <i class="fa-solid fa-clapperboard mr-2"></i>{{ film.kind|capfirst }}&nbsp;&nbsp;|&nbsp;&nbsp;
+                        <i class="fas fa-calendar-alt mr-2"></i>{% if film.airdate %}
+                        {{ film.airdate }}&nbsp;&nbsp;|&nbsp;&nbsp;
+                        {% else %}
+                        {{ film.year }}&nbsp;&nbsp;|&nbsp;&nbsp;
+                        {% endif %}
+                        <i class="fas fa-masks-theater"></i>
+                        {% for genre in film.genres %}
+                        {{ genre  }}
+                        {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </time>
+                </div>
+                <div class="postcard__bar"></div>
+                <div class="postcard__preview-txt">
+                    <strong>Cast :</strong>
+                    {% for cast in film.cast|slice:":5" %}
+                    {{ cast }}
+                    {% if not forloop.last %}, {% endif %}
+                    {% endfor %}</div>
+                    <br>
+                <div class="postcard__preview-txt">
+                    <strong>Plot :</strong>
+                    {% for i in film.plot|slice:":2" %}
+                    {{ i }}
+                    {% endfor %}</div>
+                <ul class="postcard__tagbox">
+                    <li class="tag__item"><i class="fas fa-language mr-2"></i>{{ film.languages.0 }}</li><!--iterate if you want all availabel language-->
+                    <li class="tag__item"><i class="fas fa-clock mr-2"></i>{{ film.runtimes.0 }}&nbsp;mins </li>
+                    <li class="tag__item"><i class="fa-solid fa-star mr-2" style="color: gold;"></i>{{ film.rating }} </li>
+                    {% if film.kind == "movie" %}
+                    <li class="tag__item play blue">
+                        <a href="{{ film.trailer }}"><i class="fas fa-play mr-2"></i>Play Trailer</a>
+                    </li>
+                    {% endif %}
+                    <li class="tag__item"><a href="{% url 'AddFav' film.movie_id %}"><i class="fas fa-heart mr-2" style="color: rgb(255, 2, 2);"></i>Add to Fav </a></li>
+                </ul>
+            </div>
+        </article> 
+    </div>
+</section>
+
+<!-- ##### -->
+
+    {% else %}
+    <h1 class="h1 text-center" id="pageHeaderTitle">Search Move With Correct Spelling and Year</h1>
+    <h2 class="h2 text-center" >For Example : Master 2021</h2>
+
+    {% endif %}
+
+
+{% endblock side %}
